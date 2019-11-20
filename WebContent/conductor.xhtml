@@ -1,0 +1,96 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<title>Insert title here</title>
+</h:head>
+<body>
+	<h:form>
+		<p:menubar>
+			<p:menuitem value="Lista de Clientes"
+				action="cliente?faces-redirect=true" />
+				<p:menuitem value="Listado de viajes"
+				action="viaje?faces-redirect=true" /> 
+		</p:menubar>
+	</h:form>
+	<f:view>
+		<h:form id="frmConductor">
+			<p:growl>
+				<p:autoUpdate />
+			</p:growl>
+			<p:panelGrid columns="2">
+				<h:outputLabel>id</h:outputLabel>
+				<p:inputText value="#{conductorController.c.codigoConductor}"
+					type="hidden" />
+
+				<h:outputLabel>Nombre</h:outputLabel>
+				<p:inputText value="#{conductorController.c.nombre }" />
+
+				<h:outputLabel>Apellido</h:outputLabel>
+				<p:inputText value="#{conductorController.c.apellido }"
+					required="true" requiredMessage="Ingrese nombre" />
+
+				<h:outputLabel>DUI</h:outputLabel>
+				<p:inputText value="#{conductorController.c.dui}" required="true"
+					requiredMessage="Ingrese dui" />
+
+
+				<h:outputLabel>numero_licencia</h:outputLabel>
+				<p:inputText value="#{conductorController.c.numeroLicencia }"
+					required="true" requiredMessage="Ingrese email" />
+				<h:outputLabel>Dirrecion</h:outputLabel>
+				<p:inputText value="#{conductorController.c.dirrecion }"
+					required="true" requiredMessage="Ingrese dirrecion" />
+				<h:outputLabel>Tipo_vechiculo</h:outputLabel>
+				<p:selectOneMenu value="#{conductorController.c.tipo_vehiculo}">
+					<f:selectItem itemLabel="Seleccione tipo vehiculo" />
+					<f:selectItem itemLabel="Camioneta" itemValue="Caminoneta" />
+					<f:selectItem itemLabel="pick-up" itemValue="pick-up" />
+				</p:selectOneMenu>
+				<h:outputLabel>
+					<p:commandButton actionListener="#{conductorController.agregar()}"
+						value="agregar" update="listaConductores" />
+				</h:outputLabel>
+				<h:outputLabel>
+					<p:commandButton
+						actionListener="#{conductorController.modificar()}"
+						value="modificar" update="listaConductores" />
+				</h:outputLabel>
+			</p:panelGrid>
+		</h:form>
+		<center>
+			<h3>
+				<h:outputLabel>DATOS DEL CONDUCTOR</h:outputLabel>
+			</h3>
+		</center>
+		<h:form id="listaConductores">
+
+			<p:dataTable value="#{conductorController.listaConductor}" var="cl">
+				<p:column headerText="nombre">
+					<h:outputText value="#{cl.nombre}" />
+				</p:column>
+				<p:column headerText="apellido">
+					<h:outputText value="#{cl.apellido}" />
+				</p:column>
+				<p:column headerText="dirrecion">
+					<h:outputText value="#{cl.dirrecion}" />
+				</p:column>
+				<p:column headerText="operaciones">
+
+					<p:commandButton
+						actionListener="#{conductorController.eliminar(cl.codigoConductor)}"
+						value="eliminar" update="listaConductores" />
+					<p:commandButton
+						actionListener="#{conductorController.consultarId(cl.codigoConductor)}"
+						value="seleccionar" update="frmConductor" />
+				</p:column>
+			</p:dataTable>
+
+		</h:form>
+	</f:view>
+</body>
+</html>
