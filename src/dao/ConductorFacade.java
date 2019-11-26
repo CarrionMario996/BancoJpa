@@ -4,25 +4,25 @@ import java.io.Serializable;
 
 import javax.persistence.EntityManager;
 
-import entity.Conductore;
-import utils.JPAUtils;
+import entity.Conductor;
+import utils.JpaUtils;
 
-public class ConductorFacade extends AbstractFacade<Conductore> implements Serializable {
+public class ConductorFacade extends AbstractFacade<Conductor> implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 	private EntityManager em;
 
 	public ConductorFacade() {
-		super(Conductore.class);
+		super(Conductor.class);
 		getEntityManager();
-
 	}
 
 	@Override
 	protected EntityManager getEntityManager() {
 		if (em == null) {
-			em = JPAUtils.getEntityManagerFactory().createEntityManager();
+			em = JpaUtils.getEntityManagerFactory().createEntityManager();
 		}
-
 		return em;
 	}
+
 }

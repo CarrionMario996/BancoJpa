@@ -1,77 +1,39 @@
 package dao;
 
-import java.util.List;
+
 
 import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaQuery;
+
 
 public abstract class AbstractFacade<T> {
-	private Class<T> entityClass;
+	public Class<T> entityClass;
 
 	public AbstractFacade(Class<T> entityClass) {
+		super();
 		this.entityClass = entityClass;
 	}
 
 	protected abstract EntityManager getEntityManager();
 
-	public List<T> mostrar() {
-		CriteriaQuery<T> cq = getEntityManager().getCriteriaBuilder().createQuery(entityClass);
-		return getEntityManager().createQuery(cq).getResultList();
-	}
-
-	public T findId(Object id) {
-		return getEntityManager().find(entityClass, id);
-	}
-
-	public void create(T entity) {
+	public boolean create(T entity) {
 		EntityManager em = getEntityManager();
+		boolean flag = false;
 		try {
 			em.getTransaction().begin();
 			em.persist(entity);
 			em.getTransaction().commit();
+			flag = true;
 		} catch (Exception e) {
-			if (em.getTransaction() != null && em.isOpen()) {
+			if (em.getTransaction() != null && em.getTransaction().isActive()) {
 				em.getTransaction().rollback();
 			}
 		} finally {
 			if (em != null && em.isOpen()) {
 				em.close();
 			}
-		}
-	}
 
-	public void delete(T entity) {
-		EntityManager em = getEntityManager();
-		try {
-			em.getTransaction().begin();
-			em.remove(entity);
-			em.getTransaction().commit();
-		} catch (Exception e) {
-			if (em.getTransaction() != null && em.isOpen()) {
-				em.getTransaction().rollback();
-			}
-		} finally {
-			if (em != null && em.isOpen()) {
-				em.close();
-			}
 		}
-	}
-
-	public void update(T entity) {
-		EntityManager em = getEntityManager();
-		try {
-			em.getTransaction().begin();
-			em.merge(entity);
-			em.getTransaction().commit();
-		} catch (Exception e) {
-			if (em.getTransaction() != null && em.isOpen()) {
-				em.getTransaction().rollback();
-			}
-		} finally {
-			if (em != null && em.isOpen()) {
-				em.close();
-			}
-		}
+		return flag;
 	}
 
 }
